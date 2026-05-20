@@ -319,7 +319,8 @@ struct AntLocationEvidence {
 };
 
 static bool IsCurrentAntigravityMainProcess() {
-    return ToLowerAsciiCopy(GetCurrentProcessBaseName()) == "antigravity.exe";
+    std::string procName = ToLowerAsciiCopy(GetCurrentProcessBaseName());
+    return procName == "antigravity.exe" || procName == "antigravity ide.exe";
 }
 
 static void CloseSocketCompat(SOCKET s) {
