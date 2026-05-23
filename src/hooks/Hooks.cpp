@@ -643,14 +643,14 @@ static bool ShouldAutoInjectLanguageServerNodeChild(const Core::Config& config, 
     if (lowerChild != "node.exe" && lowerChild != "node") return false;
 
     const std::string lowerCurrent = ToLowerAsciiCopy(GetCurrentProcessBaseName());
-    return lowerCurrent.find("language_server_windows") != std::string::npos;
+    return lowerCurrent.find("language_server") != std::string::npos;
 }
 
 static void LogLanguageServerNodeCompatInjectOnce(const std::string& childProcessName) {
     std::call_once(g_languageServerNodeCompatLogOnce, [&childProcessName]() {
         const std::string currentProcessName = GetCurrentProcessBaseName();
         Core::Logger::Warn(
-            "[兼容] 检测到 " + (currentProcessName.empty() ? std::string("language_server_windows 子进程") : currentProcessName) +
+            "[兼容] 检测到 " + (currentProcessName.empty() ? std::string("language_server 子进程") : currentProcessName) +
             " 派生了关键子进程 " + childProcessName +
             "；为兼容新版 Antigravity 对话链路，filtered 模式下将自动继承注入。"
             " 如需关闭该行为，请将 node.exe 加入 child_injection_exclude。");

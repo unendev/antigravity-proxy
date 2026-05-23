@@ -1,4 +1,4 @@
-# ============================================================
+﻿# ============================================================
 #  Antigravity-Proxy 编译脚本
 #  PowerShell Build Script for Windows
 # ============================================================
@@ -264,7 +264,11 @@ if ($SkipTests) {
 Write-Step "查找编译产物..."
 
 $dllPattern = if ($Config -eq "Debug") { "version*.dll" } else { "version.dll" }
-$dllPath = Get-ChildItem -Path $BuildDir -Recurse -Filter $dllPattern | Select-Object -First 1
+# 优先查找配置子目录（Visual Studio 产物路径），若无则在根目录查找（Ninja/Make 产物路径）
+$dllPath = Get-ChildItem -Path (Join-Path $BuildDir $Config) -Filter $dllPattern -ErrorAction SilentlyContinue | Select-Object -First 1
+if (-not $dllPath) {
+    $dllPath = Get-ChildItem -Path $BuildDir -Filter $dllPattern -ErrorAction SilentlyContinue | Select-Object -First 1
+}
 
 if (-not $dllPath) {
     Write-Error "未找到编译产物 DLL"
@@ -323,7 +327,7 @@ $configJson = @{
     # 子进程注入排除列表（大小写不敏感，支持子串匹配）
     child_injection_exclude = @()
     # 目标进程列表（空数组=注入所有子进程）
-    target_processes = @("language_server_windows", "Antigravity.exe", "Antigravity IDE.exe", "node.exe")
+    target_processes = @("language_server", "Antigravity.exe", "Antigravity IDE.exe", "node.exe")
     proxy_rules = @{
         # 端口白名单: 仅代理 HTTP(80) 和 HTTPS(443)，空数组=代理所有端口
         allowed_ports = @(80, 443)
@@ -507,7 +511,7 @@ Test-NetConnection -ComputerName 127.0.0.1 -Port 7890
 ### 配置示例
 ```json
 {
-    "target_processes": ["language_server_windows", "Antigravity.exe", "Antigravity IDE.exe", "node.exe"],
+    "target_processes": ["language_server", "Antigravity.exe", "Antigravity IDE.exe", "node.exe"],
     "child_injection_mode": "filtered",
     "child_injection_exclude": ["unwanted_process.exe"]
 }
