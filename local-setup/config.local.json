@@ -1,0 +1,51 @@
+﻿{
+  "child_injection_exclude": [],
+  "_version": "1.9",
+  "child_injection_mode": "filtered",
+  "proxy": {
+    "host": "127.0.0.1",
+    "type": "socks5",
+    "port": 7897
+  },
+  "traffic_logging": false,
+  "_comment": "Antigravity-Proxy 配置文件",
+  "target_processes": [
+    "language_server",
+    "Antigravity.exe",
+    "Antigravity IDE.exe",
+    "node.exe"
+  ],
+  "proxy_rules": {
+    "dns_mode": "direct",
+    "udp_fallback": "block",
+    "allowed_ports": [
+      80,
+      443
+    ],
+    "ipv6_mode": "proxy",
+    "udp_mode": "block",
+    "routing": {
+      "use_default_private": true,
+      "default_action": "proxy",
+      "enabled": true,
+      "rules": [],
+      "priority_mode": "order"
+    }
+  },
+  "_build": {
+    "config": "Release",
+    "date": "2026-09-19 12:38:51",
+    "arch": "x64"
+  },
+  "fake_ip": {
+    "enabled": true,
+    "cidr": "198.18.0.0/15"
+  },
+  "log_level": "info",
+  "timeout": {
+    "send": 5000,
+    "connect": 5000,
+    "recv": 5000
+  },
+  "child_injection": true
+}
